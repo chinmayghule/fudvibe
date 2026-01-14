@@ -1,0 +1,7 @@
+node_modules/
+.git/
+dist/
+build/
+*.log
+# Exclude large assets or data files the AI doesn't need to "read"
+public/assets/
