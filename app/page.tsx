@@ -50,7 +50,7 @@ export default function CustomerMenuPage() {
     }
   }, [settings]);
 
-  const categories = Array.from(new Set(items.map(i => i.category))).sort();
+  const categories = Array.from(new Set(items.map(i => i.category || "Uncategorized"))).sort();
 
   const filteredItems = items.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -59,7 +59,7 @@ export default function CustomerMenuPage() {
   });
 
   const groupedItems = categories.reduce((acc, category) => {
-    const itemsInCategory = filteredItems.filter(i => i.category === category);
+    const itemsInCategory = filteredItems.filter(i => (i.category || "Uncategorized") === category);
     if (itemsInCategory.length > 0) {
       acc[category] = itemsInCategory;
     }
@@ -75,16 +75,20 @@ export default function CustomerMenuPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F8F8] pb-24">
+    <div className="min-h-screen bg-gray-50 transition-colors">
+
+
       <MenuHeader settings={settings} cartCount={count} />
 
       <main className="container mx-auto px-4 py-6 space-y-6">
-        <MenuSearch value={searchTerm} onChange={setSearchTerm} />
+        <div className="max-w-4xl mx-auto">
+          <MenuSearch value={searchTerm} onChange={setSearchTerm} />
+        </div>
 
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="space-y-4">
             {Object.entries(groupedItems).map(([category, itemsInCategory]) => (
-              <Accordion key={category}>
+              <Accordion key={category} className="border-none">
                 <AccordionItem 
                   title={category} 
                   count={itemsInCategory.length}
@@ -112,8 +116,8 @@ export default function CustomerMenuPage() {
           </div>
 
           {filteredItems.length === 0 && (
-            <div className="text-center py-20">
-              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center py-20 flex flex-col items-center">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                  <Search className="h-10 w-10 text-gray-300" />
               </div>
               <h3 className="text-xl font-bold text-gray-800">No dishes found</h3>

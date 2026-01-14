@@ -2,13 +2,14 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MenuManager } from "@/components/admin/MenuManager";
+import { CategoryManager } from "@/components/admin/CategoryManager";
 import { SettingsManager } from "@/components/admin/SettingsManager";
 import { BusinessInfoManager } from "@/components/admin/BusinessInfoManager";
 import { ImageGalleryManager } from "@/components/admin/ImageGalleryManager";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 
-import { ChevronDown, Menu as MenuIcon, Info, Settings as SettingsIcon, Image as ImageIcon } from "lucide-react";
+import { ChevronDown, Menu as MenuIcon, Info, Settings as SettingsIcon, Image as ImageIcon, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function AdminDashboard() {
@@ -17,6 +18,7 @@ export default function AdminDashboard() {
 
   const tabLabels: Record<string, string> = {
     menu: "Menu Management",
+    categories: "Categories",
     gallery: "Image Gallery",
     info: "Business Info",
     settings: "Business Settings",
@@ -25,6 +27,7 @@ export default function AdminDashboard() {
   const TabIcon = ({ value }: { value: string }) => {
     switch (value) {
       case "menu": return <MenuIcon className="h-4 w-4" />;
+      case "categories": return <LayoutGrid className="h-4 w-4" />;
       case "gallery": return <ImageIcon className="h-4 w-4" />;
       case "info": return <Info className="h-4 w-4" />;
       case "settings": return <SettingsIcon className="h-4 w-4" />;
@@ -81,22 +84,28 @@ export default function AdminDashboard() {
         {/* Desktop Tabs List */}
         <TabsList className="hidden md:flex h-12 bg-white p-1 rounded-xl border-2 border-gray-100 w-fit">
           <TabsTrigger value="menu" className="rounded-lg px-6 data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
-            <MenuIcon className="h-4 w-4 mr-2" /> Menu Management
+            <MenuIcon className="h-4 w-4 mr-2" /> Menu
+          </TabsTrigger>
+          <TabsTrigger value="categories" className="rounded-lg px-6 data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+            <LayoutGrid className="h-4 w-4 mr-2" /> Categories
           </TabsTrigger>
           <TabsTrigger value="gallery" className="rounded-lg px-6 data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
-            <ImageIcon className="h-4 w-4 mr-2" /> Image Gallery
+            <ImageIcon className="h-4 w-4 mr-2" /> Gallery
           </TabsTrigger>
           <TabsTrigger value="info" className="rounded-lg px-6 data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
-            <Info className="h-4 w-4 mr-2" /> Business Info
+            <Info className="h-4 w-4 mr-2" /> Business
           </TabsTrigger>
           <TabsTrigger value="settings" className="rounded-lg px-6 data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
-            <SettingsIcon className="h-4 w-4 mr-2" /> Business Settings
+            <SettingsIcon className="h-4 w-4 mr-2" /> Settings
           </TabsTrigger>
         </TabsList>
 
         <div className="pt-2">
           <TabsContent value="menu" className="animate-in fade-in slide-in-from-bottom-2 duration-300 outline-none">
             <MenuManager />
+          </TabsContent>
+          <TabsContent value="categories" className="animate-in fade-in slide-in-from-bottom-2 duration-300 outline-none">
+            <CategoryManager />
           </TabsContent>
           <TabsContent value="gallery" className="animate-in fade-in slide-in-from-bottom-2 duration-300 outline-none">
             <ImageGalleryManager />

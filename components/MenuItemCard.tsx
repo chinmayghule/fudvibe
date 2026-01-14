@@ -49,8 +49,8 @@ export function MenuItemCard({
         </div>
 
         {/* Name and Price */}
-        <h3 className="text-lg font-extrabold text-[#1C1C1C] leading-tight mb-1">{item.name}</h3>
-        <div className="text-md font-bold text-[#4F4F4F] mb-3">
+        <h3 className="text-lg font-extrabold text-gray-900 leading-tight mb-1">{item.name}</h3>
+        <div className="text-md font-bold text-gray-600 mb-3">
           {formatCurrency(item.price)}
         </div>
 
@@ -85,11 +85,11 @@ export function MenuItemCard({
               Out of Stock
             </Button>
           ) : cartItem ? (
-            <div className="flex items-center justify-between w-28 bg-white border-2 border-[#E23744] text-[#E23744] rounded-xl h-10 overflow-hidden shadow-sm">
+            <div className="flex items-center justify-between w-28 bg-white border-2 border-primary text-primary rounded-xl h-10 overflow-hidden shadow-sm">
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="h-full w-9 text-[#E23744] hover:bg-red-50 rounded-none border-r border-[#E23744]/20"
+                className="h-full w-9 text-primary hover:bg-primary/10 rounded-none border-r border-primary/20"
                 onClick={(e) => {
                   e.stopPropagation();
                   updateQuantity(item.id, cartItem.quantity - 1);
@@ -101,7 +101,7 @@ export function MenuItemCard({
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="h-full w-9 text-[#E23744] hover:bg-red-50 rounded-none border-l border-[#E23744]/20"
+                className="h-full w-9 text-primary hover:bg-primary/10 rounded-none border-l border-primary/20"
                 onClick={(e) => {
                   e.stopPropagation();
                   updateQuantity(item.id, cartItem.quantity + 1);
@@ -112,7 +112,7 @@ export function MenuItemCard({
             </div>
           ) : (
             <Button 
-              className="w-28 h-10 bg-[#E23744] hover:bg-[#c12f3a] text-white font-black uppercase tracking-tight shadow-md transition-all rounded-xl text-[12px] border-none active:scale-95"
+              className="w-28 h-10 bg-primary hover:bg-primary/90 text-primary-foreground font-black uppercase tracking-tight shadow-md transition-all rounded-xl text-[12px] border-none active:scale-95"
               onClick={(e) => {
                 e.stopPropagation();
                 addItem(item);

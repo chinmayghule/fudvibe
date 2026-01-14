@@ -24,6 +24,8 @@ type CartContextType = {
   setCookingInstructions: (val: string) => void;
   deliveryAddress: string;
   setDeliveryAddress: (val: string) => void;
+  customerName: string;
+  setCustomerName: (val: string) => void;
 };
 
 const CartContext = createContext<CartContextType>({
@@ -42,6 +44,8 @@ const CartContext = createContext<CartContextType>({
   setCookingInstructions: () => {},
   deliveryAddress: "",
   setDeliveryAddress: () => {},
+  customerName: "",
+  setCustomerName: () => {},
 });
 
 export const useCart = () => useContext(CartContext);
@@ -52,6 +56,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [specialInstructions, setSpecialInstructions] = useState("");
   const [cookingInstructions, setCookingInstructions] = useState("");
   const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [customerName, setCustomerName] = useState("");
 
   // Load state from localStorage on mount
   useEffect(() => {
@@ -64,6 +69,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (parsed.specialInstructions) setSpecialInstructions(parsed.specialInstructions);
         if (parsed.cookingInstructions) setCookingInstructions(parsed.cookingInstructions);
         if (parsed.deliveryAddress) setDeliveryAddress(parsed.deliveryAddress);
+        if (parsed.customerName) setCustomerName(parsed.customerName);
       } catch (e) {
         console.error("Failed to parse cart", e);
       }
@@ -82,7 +88,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       orderType,
       specialInstructions,
       cookingInstructions,
-      deliveryAddress
+      deliveryAddress,
+      customerName
     };
     localStorage.setItem("cart", JSON.stringify(stateToSave));
   }, [items, orderType, specialInstructions, cookingInstructions, deliveryAddress]);
@@ -137,7 +144,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         orderType, setOrderType,
         specialInstructions, setSpecialInstructions,
         cookingInstructions, setCookingInstructions,
-        deliveryAddress, setDeliveryAddress
+        deliveryAddress, setDeliveryAddress,
+        customerName, setCustomerName
       }}
     >
       {children}

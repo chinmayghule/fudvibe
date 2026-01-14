@@ -47,13 +47,10 @@ export function MenuItemForm({ initialData, isEditing = false }: MenuItemFormPro
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
   const [loadingGallery, setLoadingGallery] = useState(false);
 
-  const [isAddingCategory, setIsAddingCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState("");
-
   const [formData, setFormData] = useState({
     name: "",
     price: "",
-    category: "",
+    categoryId: "",
     description: "",
     available: true,
     visible: true,
@@ -66,8 +63,10 @@ export function MenuItemForm({ initialData, isEditing = false }: MenuItemFormPro
       try {
         const catData = await getCategories();
         setCategories(catData);
-        if (!isEditing && catData.length > 0) {
-          setFormData(prev => ({ ...prev, category: catData[0].name }));
+        
+        // If we're creating a new item and have categories, default to the first one
+        if (!isEditing && catData.length > 0 && !formData.categoryId) {
+          setFormData(prev => ({ ...prev, categoryId: catData[0].id }));
         }
       } catch (err) {
         console.error("Failed to load categories:", err);
@@ -77,14 +76,14 @@ export function MenuItemForm({ initialData, isEditing = false }: MenuItemFormPro
       }
     };
     loadCategories();
-  }, [isEditing]);
+  }, [isEditing, formData.categoryId]);
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         name: initialData.name,
         price: initialData.price.toString(),
-        category: initialData.category,
+        categoryId: initialData.categoryId || "",
         description: initialData.description || "",
         available: initialData.available,
         visible: initialData.visible,
@@ -112,10 +111,8 @@ export function MenuItemForm({ initialData, isEditing = false }: MenuItemFormPro
     e.preventDefault();
     setLoading(true);
 
-    let categoryToUse = isAddingCategory ? newCategoryName : formData.category;
-    
-    if (isAddingCategory && !newCategoryName) {
-      toast.error("Please enter a category name");
+    if (!formData.categoryId) {
+      toast.error("Please select a category");
       setLoading(false);
       return;
     }
@@ -123,7 +120,7 @@ export function MenuItemForm({ initialData, isEditing = false }: MenuItemFormPro
     const itemData = {
       name: formData.name,
       price: parseFloat(formData.price),
-      category: categoryToUse,
+      categoryId: formData.categoryId,
       description: formData.description,
       available: formData.available,
       visible: formData.visible,
@@ -132,9 +129,6 @@ export function MenuItemForm({ initialData, isEditing = false }: MenuItemFormPro
     };
 
     try {
-      if (isAddingCategory && categoryToUse) {
-        await addCategory(categoryToUse);
-      }
 
       if (isEditing && initialData) {
         await updateMenuItem(initialData.id, itemData);
@@ -231,31 +225,13 @@ export function MenuItemForm({ initialData, isEditing = false }: MenuItemFormPro
 
               <div className="grid gap-2">
                 <Label htmlFor="category">Category</Label>
-                {!isAddingCategory ? (
-                  <div className="flex flex-col md:flex-row gap-2">
-                    <div className="flex-1 min-w-0">
-                      <Select 
-                        value={formData.category}
-                        onValueChange={(val) => setFormData({...formData, category: val})}
-                        placeholder="Select category"
-                        options={categories.map(cat => ({ value: cat.name, label: cat.name }))}
-                      />
-                    </div>
-                    <Button type="button" variant="secondary" onClick={() => setIsAddingCategory(true)} className="w-full md:w-auto shrink-0">
-                      <Plus className="h-4 w-4 mr-2" /> New Category
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex gap-2">
-                    <Input 
-                      placeholder="New category name..." 
-                      value={newCategoryName}
-                      onChange={(e) => setNewCategoryName(e.target.value)}
-                      autoFocus
-                    />
-                    <Button type="button" variant="ghost" onClick={() => setIsAddingCategory(false)}>Cancel</Button>
-                  </div>
-                )}
+                <Select 
+                  value={formData.categoryId}
+                  onValueChange={(val) => setFormData({...formData, categoryId: val})}
+                  placeholder="Select category"
+                  options={categories.map(cat => ({ value: cat.id, label: cat.name }))}
+                />
+                <p className="text-[10px] text-muted-foreground">Manage categories in the Categories tab.</p>
               </div>
 
               <div className="grid gap-2">

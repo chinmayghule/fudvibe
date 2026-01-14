@@ -19,7 +19,8 @@ export type MenuItem = {
   id: string;
   name: string;
   price: number;
-  category: string;
+  categoryId: string;
+  category?: string; // Keep for legacy/lookup purposes
   available: boolean;
   visible: boolean;
   description?: string;
@@ -71,7 +72,19 @@ export async function addCategory(name: string): Promise<string> {
 }
 
 export async function deleteCategory(id: string): Promise<void> {
-  await deleteDoc(doc(db, "categories", id));
+  try {
+    const docRef = doc(db, "categories", id);
+    await deleteDoc(docRef);
+    console.log("Successfully deleted category:", id);
+  } catch (error) {
+    console.error("Error deleting category:", error);
+    throw error;
+  }
+}
+
+export async function updateCategory(id: string, name: string): Promise<void> {
+  const docRef = doc(db, "categories", id);
+  await updateDoc(docRef, { name });
 }
 
 // --- Menu Operations ---
@@ -86,6 +99,9 @@ export async function getMenuItems(onlyVisible = false): Promise<MenuItem[]> {
     }
 
     const snapshot = await getDocs(q);
+    const categories = await getCategories();
+    const categoryMap = new Map(categories.map(c => [c.id, c.name]));
+
     return snapshot.docs.map((doc) => {
       const data = doc.data() as any;
       
@@ -100,12 +116,24 @@ export async function getMenuItems(onlyVisible = false): Promise<MenuItem[]> {
       return {
         id: doc.id,
         ...data,
+        category: data.categoryId ? (categoryMap.get(data.categoryId) || "Uncategorized") : (data.category || "Uncategorized"),
         imageUrls,
       } as MenuItem;
     });
   } catch (error) {
     console.error("Error fetching menu items:", error);
     // Propagate error to let UI handle it
+    throw error;
+  }
+}
+
+export async function getMenuItemsByCategory(categoryId: string): Promise<MenuItem[]> {
+  try {
+    const q = query(collection(db, "menu_items"), where("categoryId", "==", categoryId));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as MenuItem));
+  } catch (error) {
+    console.error("Error fetching items by category:", error);
     throw error;
   }
 }

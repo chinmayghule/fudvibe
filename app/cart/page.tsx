@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Minus, Plus, ShoppingBag, MessageSquare, Phone, MapPin, ClipboardList, UtensilsCrossed, Utensils } from "lucide-react";
+import { ArrowLeft, Minus, Plus, ShoppingBag, MessageSquare, Phone, MapPin, ClipboardList, UtensilsCrossed, Utensils, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -18,7 +18,8 @@ export default function CartPage() {
     orderType, setOrderType,
     specialInstructions, setSpecialInstructions,
     cookingInstructions, setCookingInstructions,
-    deliveryAddress, setDeliveryAddress
+    deliveryAddress, setDeliveryAddress,
+    customerName, setCustomerName
   } = useCart();
   const router = useRouter();
   const { settings, loading } = useSettings();
@@ -45,10 +46,16 @@ export default function CartPage() {
       toast.error("Please provide a delivery address");
       return;
     }
+    
+    if (!customerName.trim()) {
+      toast.error("Please provide your name");
+      return;
+    }
 
     // Generate WhatsApp text without pricing
     let message = `*NEW ORDER REQUEST*\n`;
     message += `Type: ${orderType.toUpperCase()}\n`;
+    message += `Customer: ${customerName}\n`;
     message += `Date: ${new Date().toLocaleString()}\n\n`;
     
     message += `*ITEMS*\n`;
@@ -267,6 +274,21 @@ export default function CartPage() {
                 </div>
               </div>
             )}
+
+            {/* Customer Name */}
+            <div className="space-y-2">
+              <Label className="flex items-center gap-2 font-bold">
+                <User className="h-4 w-4 text-gray-400" />
+                Your Name
+              </Label>
+              <Input
+                placeholder="Enter your name..."
+                className="h-12 rounded-xl border border-gray-200 px-4 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                required
+              />
+            </div>
           </CardContent>
         </Card>
 

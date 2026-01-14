@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Loader2, LogOut, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSettings } from "@/context/SettingsContext";
+
 export default function AdminDashboardLayout({
   children,
 }: {
@@ -57,8 +58,8 @@ export default function AdminDashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b sticky top-0 z-10 shadow-sm">
+    <div className="min-h-screen bg-gray-50 transition-colors">
+      <header className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-10 shadow-sm transition-colors">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 sm:h-9 sm:w-9 rounded-full overflow-hidden border border-gray-100 flex items-center justify-center bg-gray-50 shrink-0">
@@ -73,26 +74,28 @@ export default function AdminDashboardLayout({
               {settings?.businessName || "Admin"} Dashboard
             </h1>
           </div>
-          <Dialog open={isLogoutOpen} onOpenChange={setIsLogoutOpen}>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="sm">
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Confirm Logout</DialogTitle>
-                <DialogDescription>
-                  Are you sure you want to log out of the admin panel?
-                </DialogDescription>
-              </DialogHeader>
-              <DialogFooter>
-                <Button variant="ghost" onClick={() => setIsLogoutOpen(false)}>Cancel</Button>
-                <Button variant="danger" onClick={handleLogout}>Log out</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center gap-2">
+            <Dialog open={isLogoutOpen} onOpenChange={setIsLogoutOpen}>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-gray-600 hover:text-red-600">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Confirm Logout</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to log out of the admin panel?
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button variant="ghost" onClick={() => setIsLogoutOpen(false)}>Cancel</Button>
+                  <Button variant="danger" onClick={handleLogout}>Log out</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
       </header>
       <main className="container mx-auto px-4 py-8">{children}</main>

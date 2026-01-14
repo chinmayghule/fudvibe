@@ -1,6 +1,4 @@
-"use client";
-
-import { ShoppingCart, PhoneCall, Utensils } from "lucide-react";
+import { ShoppingCart, Store, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BusinessSettings } from "@/lib/db";
 import { useRouter } from "next/navigation";
@@ -14,7 +12,7 @@ export function MenuHeader({ settings, cartCount }: MenuHeaderProps) {
   const router = useRouter();
 
   return (
-    <header className="sticky top-0 z-20 bg-white shadow-sm border-b">
+    <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100 transition-colors">
       <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center gap-4">
         <div className="flex items-center justify-between flex-1">
           <div className="flex items-center gap-3">
@@ -35,21 +33,22 @@ export function MenuHeader({ settings, cartCount }: MenuHeaderProps) {
           </div>
           
           <div className="flex items-center gap-2 md:hidden">
+
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => router.push("/contact")}
               className="text-gray-600 hover:bg-gray-100 rounded-full"
             >
-              <PhoneCall className="h-5 w-5" />
+              <Store className="h-5 w-5" />
             </Button>
             <Button 
               className="relative bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-full px-4 h-10 shadow-sm" 
               onClick={() => router.push("/cart")}
             >
-              <ShoppingCart className="h-5 w-5 text-[#E23744]" />
+              <ShoppingCart className="h-5 w-5 text-primary" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#E23744] text-white text-[10px] font-black rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-black rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
                   {cartCount}
                 </span>
               )}
@@ -59,22 +58,23 @@ export function MenuHeader({ settings, cartCount }: MenuHeaderProps) {
 
         <div className="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto">
           <div className="hidden md:flex items-center gap-3">
+
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => router.push("/contact")}
               className="text-gray-600 hover:bg-gray-100 rounded-full"
             >
-              <PhoneCall className="h-5 w-5" />
+              <Store className="h-5 w-5" />
             </Button>
             <Button 
-              className="relative bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-full px-4 h-10 shadow-sm" 
+              className="relative bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-full px-4 h-10 shadow-sm transition-all" 
               onClick={() => router.push("/cart")}
             >
-              <ShoppingCart className="h-5 w-5 mr-2 text-[#E23744]" />
+              <ShoppingCart className="h-5 w-5 mr-2 text-primary" />
               <span className="font-bold">Cart</span>
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#E23744] text-white text-[10px] font-black rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-[10px] font-black rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
                   {cartCount}
                 </span>
               )}

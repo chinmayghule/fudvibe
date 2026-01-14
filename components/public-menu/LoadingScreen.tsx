@@ -9,7 +9,7 @@ interface LoadingScreenProps {
 
 export function LoadingScreen({ settings }: LoadingScreenProps) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4 text-center transition-colors">
       <div className="relative mb-6">
         <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping scale-150" />
         <div className="relative h-24 w-24 rounded-full bg-white shadow-2xl flex items-center justify-center border-4 border-primary/10 overflow-hidden">

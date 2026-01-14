@@ -27,6 +27,8 @@ export function Select({
   className,
   disabled = false,
 }: SelectProps) {
+  const selectedLabel = options.find(o => o.value === value)?.label;
+
   return (
     <BaseSelect.Root
       value={value}
@@ -39,7 +41,9 @@ export function Select({
           className
         )}
       >
-        <BaseSelect.Value />
+        <span className={cn("truncate", !value && "text-muted-foreground")}>
+          {selectedLabel || placeholder}
+        </span>
         <BaseSelect.Icon>
           <ChevronDown className="h-4 w-4 opacity-50" />
         </BaseSelect.Icon>

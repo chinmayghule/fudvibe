@@ -21,6 +21,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { CartProvider } from "@/context/CartContext";
 import { SettingsProvider } from "@/context/SettingsContext";
 import { Toaster } from "sonner";
+import { Footer } from "@/components/Footer";
 
 export default function RootLayout({
   children,
@@ -28,18 +29,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <SettingsProvider>
-          <AuthProvider>
-            <CartProvider>
-              {children}
-              <Toaster />
-            </CartProvider>
-          </AuthProvider>
-        </SettingsProvider>
+          <SettingsProvider>
+            <AuthProvider>
+              <CartProvider>
+                <main className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+                <Toaster />
+              </CartProvider>
+            </AuthProvider>
+          </SettingsProvider>
       </body>
     </html>
   );
